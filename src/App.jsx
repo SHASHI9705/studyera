@@ -1,28 +1,44 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 
 function App() {
 
-  return (
-    <div>
-      <Toggle />
-    </div>
-  )
-}
+  const [todo,setTodo] = useState(1);
+  const [data,setData] = useState({});
+  const [load,setLoading] = useState(true);
 
-
-
-
-function Toggle(){
-
-  let [isVisible,setVisible] = useState(true);
+  useEffect(function(){
+    setLoading(true);
+    fetch("https://jsonplaceholder.typicode.com/todos/" + todo)
+    .then(async res=> {
+    const json = await res.json();
+    setData(json);
+    setLoading(false);
+  });
+  },[todo])
 
   return <div>
-    <button onClick={() => {setVisible(!isVisible)}}>click me</button>
-    {isVisible? <p>hey i am here</p> :<p>i am not here</p>}
+    <button onClick={() => {setTodo(1)}}>todo 1</button>
+    <button onClick={() => {setTodo(2)}}>todo 2</button>
+    <button onClick={() => {setTodo(3)}}>todo 3</button>
+    <br />
+    {load ? "loading ...." : data.title}
   </div>
-  
 }
+
+
+
+
+// function Toggle(){
+
+//   let [isVisible,setVisible] = useState(true);
+
+//   return <div>
+//     <button onClick={() => {setVisible(!isVisible)}}>click me</button>
+//     {isVisible? <p>hey i am here</p> :<p>i am not here</p>}
+//   </div>
+  
+// }
 
 // const style = {
 //   backgroundColor:"red",
